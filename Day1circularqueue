@@ -1,0 +1,101 @@
+#include <iostream>
+using namespace std;
+
+#define SIZE 5 // Define the size of the Circular Queue
+
+class CircularQueue {
+private:
+    int items[SIZE], front, rear;
+
+public:
+    CircularQueue() {
+        front = -1;
+        rear = -1;
+    }
+
+    // Inserting an element into the Circular Queue
+    void enqueue(int value) {
+        if ((front == 0 && rear == SIZE - 1) || (rear == (front - 1) % (SIZE - 1))) {
+            cout << "Queue is Full!" << endl;
+            return;
+        }
+        else if (front == -1) { // Insert the first element
+            front = rear = 0;
+        }
+        else if (rear == SIZE - 1 && front != 0) {
+            rear = 0; // Circular condition
+        }
+        else {
+            rear++;
+        }
+        items[rear] = value;
+        cout << "Inserted " << value << endl;
+    }
+
+    // Deleting an element from the Circular Queue
+    int dequeue() {
+        if (front == -1) {
+            cout << "Queue is Empty!" << endl;
+            return -1;
+        }
+
+        int data = items[front];
+        items[front] = -1;
+        if (front == rear) { // Queue becomes empty after dequeuing the last element
+            front = -1;
+            rear = -1;
+        }
+        else if (front == SIZE - 1) {
+            front = 0; // Circular condition
+        }
+        else {
+            front++;
+        }
+        cout << "Deleted " << data << endl;
+        return data;
+    }
+
+    // Displaying the elements of the Circular Queue
+    void display() {
+        if (front == -1) {
+            cout << "Queue is Empty!" << endl;
+            return;
+        }
+        cout << "Queue elements are: ";
+        if (rear >= front) {
+            for (int i = front; i <= rear; i++)
+                cout << items[i] << " ";
+        }
+        else {
+            for (int i = front; i < SIZE; i++)
+                cout << items[i] << " ";
+            for (int i = 0; i <= rear; i++)
+                cout << items[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    CircularQueue q;
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.enqueue(40);
+    q.enqueue(50);
+    
+    q.display();
+
+    q.dequeue();
+    q.dequeue();
+
+    q.display();
+
+    q.enqueue(60);
+    q.enqueue(70);
+
+    q.display();
+
+    return 0;
+}
